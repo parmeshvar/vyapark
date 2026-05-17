@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vyapark - Cart & Checkout</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/cart.css">
+</head>
+<body class="bg-light">
+    <div id="app-container" style="padding-bottom:120px;">
+        <!-- Header -->
+        <header class="app-header glassmorphism" style="position:sticky; top:0; z-index:100;">
+            <div class="header-top" style="align-items:center;">
+                <button class="back-btn-small" onclick="window.location.href='index.html'"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2 style="font-size:20px; flex:1; margin-left:12px;">My Cart</h2>
+                <span style="font-weight:600; color:var(--text-muted);">2 Items</span>
+            </div>
+        </header>
+
+        <!-- Cart Items -->
+        <main class="cart-items-container p-3">
+            <!-- Item 1 -->
+            <div class="cart-item">
+                <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=100&q=80" alt="Product">
+                <div class="ci-details">
+                    <h3 class="ci-title">Wireless Earbuds Pro</h3>
+                    <p class="ci-seller"><i class="fa-solid fa-shop"></i> Tech Store Delhi (1.2km)</p>
+                    <div class="ci-price-row">
+                        <span class="price">₹1299</span>
+                        <div class="qty-control">
+                            <button class="qty-btn" onclick="updateQty(this, -1)">-</button>
+                            <span class="qty-val">1</span>
+                            <button class="qty-btn" onclick="updateQty(this, 1)">+</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="delete-btn"><i class="fa-solid fa-trash-can"></i></button>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="cart-item">
+                <img src="https://images.unsplash.com/photo-1596755094514-f87e32f85e2c?w=100&q=80" alt="Product">
+                <div class="ci-details">
+                    <h3 class="ci-title">Men's Casual Shirt</h3>
+                    <p class="ci-seller"><i class="fa-solid fa-shop"></i> Fashion Hub (0.8km)</p>
+                    <div class="ci-price-row">
+                        <span class="price">₹499</span>
+                        <div class="qty-control">
+                            <button class="qty-btn" onclick="updateQty(this, -1)">-</button>
+                            <span class="qty-val">2</span>
+                            <button class="qty-btn" onclick="updateQty(this, 1)">+</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="delete-btn"><i class="fa-solid fa-trash-can"></i></button>
+            </div>
+        </main>
+
+        <!-- Delivery & Payment Section -->
+        <section class="checkout-section p-3">
+            <h3 class="section-subtitle">Delivery Method</h3>
+            <div class="options-grid">
+                <label class="option-card" onclick="setDelivery('pickup')">
+                    <input type="radio" name="delivery" value="pickup" checked>
+                    <div class="oc-content">
+                        <i class="fa-solid fa-person-walking-luggage"></i>
+                        <span>Pickup from Shop</span>
+                    </div>
+                </label>
+                <label class="option-card" onclick="setDelivery('home')">
+                    <input type="radio" name="delivery" value="home">
+                    <div class="oc-content">
+                        <i class="fa-solid fa-motorcycle"></i>
+                        <span>Home Delivery</span>
+                    </div>
+                </label>
+            </div>
+
+            <div id="address-box" class="address-box hidden mt-3">
+                <div class="d-flex-between">
+                    <h4>Delivery Address</h4>
+                    <button class="btn-text-primary">Change</button>
+                </div>
+                <p>123, Model Town, New Delhi, 110009</p>
+            </div>
+
+            <h3 class="section-subtitle mt-4">Payment Method</h3>
+            <div class="options-list">
+                <label class="payment-option">
+                    <div class="po-left">
+                        <i class="fa-brands fa-google-pay text-primary" style="font-size:24px;"></i>
+                        <span>UPI / Online Payment</span>
+                    </div>
+                    <input type="radio" name="payment" value="online" checked>
+                </label>
+                
+                <label class="payment-option" id="pay-at-shop">
+                    <div class="po-left">
+                        <i class="fa-solid fa-store text-warning" style="font-size:20px;"></i>
+                        <span>Pay at Shop (Cash/QR)</span>
+                    </div>
+                    <input type="radio" name="payment" value="shop">
+                </label>
+                
+                <label class="payment-option hidden" id="cash-on-delivery">
+                    <div class="po-left">
+                        <i class="fa-solid fa-money-bill-wave text-success" style="font-size:20px;"></i>
+                        <span>Cash on Delivery (COD)</span>
+                    </div>
+                    <input type="radio" name="payment" value="cod">
+                </label>
+            </div>
+            
+            <!-- Bill Details -->
+            <div class="bill-details mt-4">
+                <h3 class="section-subtitle">Bill Details</h3>
+                <div class="bill-row">
+                    <span>Item Total</span>
+                    <span>₹2297</span>
+                </div>
+                <div class="bill-row" id="delivery-fee-row" style="display:none;">
+                    <span>Delivery Fee</span>
+                    <span>₹40</span>
+                </div>
+                <div class="bill-row discount">
+                    <span>Platform Discount</span>
+                    <span>-₹100</span>
+                </div>
+                <div class="divider-line"></div>
+                <div class="bill-row total">
+                    <span>Grand Total</span>
+                    <span id="grand-total">₹2197</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fixed Checkout Bottom Bar -->
+        <div class="checkout-bottom-bar glassmorphism">
+            <div class="cbb-left">
+                <p>Total Payment</p>
+                <h3 id="bottom-total">₹2197</h3>
+            </div>
+            <button class="btn-primary" style="padding: 12px 32px;" onclick="placeOrder()">Place Order <i class="fa-solid fa-arrow-right ml-2"></i></button>
+        </div>
+
+        <!-- Success Modal (Hidden by default) -->
+        <div id="success-modal" class="modal-overlay hidden">
+            <div class="modal-content">
+                <div class="success-icon"><i class="fa-solid fa-check"></i></div>
+                <h2>Order Placed!</h2>
+                <p>Your order ID is <strong>#TM-987654</strong></p>
+                <p class="text-muted mt-2 text-center" id="success-msg" style="font-size:14px;">Please visit the shop to collect your items and make the payment.</p>
+                <div class="modal-actions mt-4">
+                    <button class="btn-outline w-100" onclick="window.location.href='index.html'">Back to Home</button>
+                    <button class="btn-primary w-100" id="direction-btn" onclick="window.location.href='map.html'"><i class="fa-solid fa-directions"></i> Get Directions</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="js/cart.js"></script>
+</body>
+</html>

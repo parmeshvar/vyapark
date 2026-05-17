@@ -1,0 +1,339 @@
+/* Chat List Styles */
+.p-0 { padding: 0 !important; }
+
+.chat-tabs {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.chat-tab {
+    padding: 8px 16px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s;
+}
+
+.chat-tab.active {
+    color: var(--primary);
+}
+
+.chat-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--primary);
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+.chat-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-list-item {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    gap: 16px;
+    border-bottom: 1px solid var(--border-color);
+    background: white;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.chat-list-item:active {
+    background: var(--bg-color);
+}
+
+.cli-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    position: relative;
+}
+
+.cli-avatar-wrapper {
+    position: relative;
+}
+
+.online-dot {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 12px;
+    height: 12px;
+    background: var(--success);
+    border: 2px solid white;
+    border-radius: 50%;
+}
+
+.cli-content {
+    flex: 1;
+    overflow: hidden;
+}
+
+.cli-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.cli-top h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cli-time {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.cli-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cli-msg {
+    font-size: 14px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cli-msg.unread {
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.unread-badge {
+    background: var(--primary);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6px;
+}
+
+/* Chat Room Styles */
+.chat-bg {
+    background-color: #f0f2f5;
+}
+
+.chat-user-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: 12px;
+}
+
+.chat-user-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.cu-details h3 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.status {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.status.online {
+    color: var(--success);
+}
+
+.chat-reference-product {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--card-bg);
+    padding: 8px 12px;
+    border-radius: 12px;
+    margin-top: 12px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+}
+
+.chat-reference-product img {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.crp-info h4 {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.crp-info span {
+    font-size: 12px;
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 140px 16px 80px; /* Space for fixed header and footer */
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.msg-date {
+    text-align: center;
+    background: rgba(0,0,0,0.05);
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    align-self: center;
+    margin: 16px 0 8px;
+}
+
+.message {
+    display: flex;
+    margin-bottom: 8px;
+    max-width: 80%;
+}
+
+.msg-received {
+    align-self: flex-start;
+}
+
+.msg-sent {
+    align-self: flex-end;
+}
+
+.msg-bubble {
+    padding: 10px 14px;
+    border-radius: 16px;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.msg-received .msg-bubble {
+    background: white;
+    border-bottom-left-radius: 4px;
+}
+
+.msg-sent .msg-bubble {
+    background: var(--primary);
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.msg-bubble p {
+    font-size: 14.5px;
+    line-height: 1.4;
+    margin-bottom: 4px;
+}
+
+.msg-time {
+    font-size: 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 4px;
+}
+
+.msg-received .msg-time { color: var(--text-muted); }
+.msg-sent .msg-time { color: rgba(255,255,255,0.8); }
+
+.msg-sent .msg-time i { color: #fff; font-size: 10px; }
+
+/* Input Area */
+.chat-input-area {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--glass-bg);
+    border-top: 1px solid var(--border-color);
+    z-index: 100;
+}
+
+.attach-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 20px;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-input-area input {
+    flex: 1;
+    background: white;
+    border: 1px solid var(--border-color);
+    padding: 12px 16px;
+    border-radius: 24px;
+    font-size: 15px;
+    outline: none;
+    box-shadow: var(--shadow-sm);
+}
+
+.chat-input-area input:focus {
+    border-color: var(--primary-light);
+}
+
+.send-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+    transition: transform 0.2s;
+}
+
+.send-btn:active {
+    transform: scale(0.95);
+}

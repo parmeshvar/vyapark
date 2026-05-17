@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vyapark - Seller Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/seller.css">
+</head>
+<body>
+    <div id="app-container" class="seller-app">
+        <!-- Header -->
+        <header class="app-header glassmorphism seller-header">
+            <div class="header-top">
+                <div>
+                    <h2 class="text-primary" style="margin:0;font-size:20px;">Tech Store Delhi</h2>
+                    <span class="verified-badge"><i class="fa-solid fa-circle-check"></i> Verified Seller</span>
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn"><i class="fa-solid fa-qrcode"></i></button>
+                    <button class="icon-btn profile-btn"><img src="https://ui-avatars.com/api/?name=TS&background=6366f1&color=fff" alt="Shop"></button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="app-main seller-main" id="main-content">
+            <!-- Dynamic Content Injected Here -->
+        </main>
+
+        <!-- Seller Bottom Navigation -->
+        <nav class="bottom-nav glassmorphism">
+            <a href="#" class="nav-item active" onclick="switchTab('dashboard', this)">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Home</span>
+            </a>
+            <a href="#" class="nav-item" onclick="switchTab('products', this)">
+                <i class="fa-solid fa-box-open"></i>
+                <span>Products</span>
+            </a>
+            <a href="#" class="nav-item" onclick="switchTab('add-product', this)">
+                <i class="fa-solid fa-circle-plus nav-add"></i>
+                <span>Add New</span>
+            </a>
+            <a href="#" class="nav-item" onclick="switchTab('orders', this)">
+                <i class="fa-solid fa-clipboard-list"></i>
+                <span>Orders</span>
+            </a>
+            <a href="#" class="nav-item" onclick="switchTab('profile', this)">
+                <i class="fa-solid fa-store"></i>
+                <span>Shop</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Tab Templates -->
+    <template id="tpl-dashboard">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon bg-blue"><i class="fa-solid fa-eye"></i></div>
+                <div class="stat-info">
+                    <h4>1.2K</h4>
+                    <p>Shop Views</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-green"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+                <div class="stat-info">
+                    <h4>₹12.5K</h4>
+                    <p>Sales (Wk)</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-orange"><i class="fa-solid fa-box"></i></div>
+                <div class="stat-info">
+                    <h4>45</h4>
+                    <p>Active Orders</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-purple"><i class="fa-regular fa-comment-dots"></i></div>
+                <div class="stat-info">
+                    <h4>12</h4>
+                    <p>Inquiries</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3>Sales Overview</h3>
+            <canvas id="salesChart"></canvas>
+        </div>
+
+        <div class="quick-actions">
+            <button class="action-btn"><i class="fa-solid fa-bullhorn text-primary"></i> Promote Product</button>
+            <button class="action-btn"><i class="fa-solid fa-file-excel text-success"></i> Bulk Upload</button>
+        </div>
+    </template>
+
+    <template id="tpl-products">
+        <div class="seller-shop-info" style="background:var(--card-bg); padding:16px; border-radius:12px; margin-bottom:16px; box-shadow:var(--shadow-sm); border:1px solid var(--border-color);">
+            <h3 style="margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">Tech Store Delhi <button class="btn-outline-small" style="padding:4px 10px;"><i class="fa-solid fa-share-nodes"></i> Share Catalog</button></h3>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:6px;"><i class="fa-solid fa-location-dot" style="width:16px; text-align:center;"></i> Connaught Place, New Delhi</p>
+            <p style="font-size:13px; color:var(--text-main); font-weight:600;"><i class="fa-solid fa-phone" style="width:16px; text-align:center; color:var(--primary);"></i> +91 9876543210</p>
+        </div>
+
+        <div class="section-header" style="flex-direction:column; align-items:flex-start; gap:12px;">
+            <div style="display:flex; justify-content:space-between; width:100%;">
+                <h2 class="section-title" style="margin:0;">My Catalog (24)</h2>
+                <button class="btn-outline-small" style="padding:4px 8px;"><i class="fa-solid fa-filter"></i> Filter</button>
+            </div>
+            <div class="search-bar small-search w-100">
+                <i class="fa-solid fa-magnifying-glass search-icon" style="top:50%; transform:translateY(-50%);"></i>
+                <input type="text" placeholder="Search products..." style="padding:10px 10px 10px 40px; border-radius:8px;">
+            </div>
+        </div>
+        
+        <div class="seller-product-list">
+            <!-- Product Item -->
+            <div class="seller-product-item">
+                <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=100&q=80" alt="Earbuds">
+                <div class="spi-info">
+                    <h4>Wireless Earbuds Pro</h4>
+                    <div class="spi-price">₹1299 <span class="stock text-success">In Stock (15)</span></div>
+                    <div class="spi-actions">
+                        <button class="btn-icon-small"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn-icon-small"><i class="fa-solid fa-share-nodes"></i></button>
+                        <div class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="seller-product-item">
+                <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=100&q=80" alt="Watch">
+                <div class="spi-info">
+                    <h4>Smart Watch Series 8</h4>
+                    <div class="spi-price">₹2499 <span class="stock text-danger">Out of Stock</span></div>
+                    <div class="spi-actions">
+                        <button class="btn-icon-small"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn-icon-small"><i class="fa-solid fa-share-nodes"></i></button>
+                        <div class="toggle-switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="tpl-add-product">
+        <h2 class="section-title">Add New Product</h2>
+        
+        <!-- Step 1: Search Master Catalog -->
+        <div class="search-bar w-100 mb-3" style="border: 1px solid var(--border-color); box-shadow:none;">
+            <i class="fa-solid fa-magnifying-glass search-icon" style="top:50%; transform:translateY(-50%);"></i>
+            <input type="text" placeholder="Find product to sell (e.g. Maggi, Smartwatch)" oninput="showMasterProducts(this.value)" style="padding:12px 12px 12px 40px; border-radius:8px;">
+        </div>
+        
+        <!-- Master Products Grid -->
+        <div id="master-products-grid" style="display:none; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom: 24px;">
+            <div class="product-card" onclick="selectMasterProduct('Maggi Noodles 140g', 'Groceries', 'https://images.unsplash.com/photo-1604152135912-04a022e23696?w=200&q=80', 30)" style="cursor:pointer; border:1px solid var(--primary); padding:8px; display:flex; flex-direction:column;">
+                <img src="https://images.unsplash.com/photo-1604152135912-04a022e23696?w=200&q=80" style="height:100px; width:100%; object-fit:cover; border-radius:8px;">
+                <h4 style="font-size:13px; margin:8px 0 4px;">Maggi Noodles 140g</h4>
+                <p style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">MRP: ₹30</p>
+                <button class="btn-primary-small w-100 mt-auto" style="padding:4px;">Select</button>
+            </div>
+            <div class="product-card" onclick="selectMasterProduct('Coca Cola 2L', 'Groceries', 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=200&q=80', 95)" style="cursor:pointer; border:1px solid var(--primary); padding:8px; display:flex; flex-direction:column;">
+                <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=200&q=80" style="height:100px; width:100%; object-fit:cover; border-radius:8px;">
+                <h4 style="font-size:13px; margin:8px 0 4px;">Coca Cola 2L</h4>
+                <p style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">MRP: ₹95</p>
+                <button class="btn-primary-small w-100 mt-auto" style="padding:4px;">Select</button>
+            </div>
+            <div class="product-card" onclick="selectMasterProduct('Smart Watch Series 8', 'Electronics', 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=200&q=80', 5000)" style="cursor:pointer; border:1px solid var(--primary); padding:8px; display:flex; flex-direction:column;">
+                <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=200&q=80" style="height:100px; width:100%; object-fit:cover; border-radius:8px;">
+                <h4 style="font-size:13px; margin:8px 0 4px;">Smart Watch S8</h4>
+                <p style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">MRP: ₹5000</p>
+                <button class="btn-primary-small w-100 mt-auto" style="padding:4px;">Select</button>
+            </div>
+        </div>
+
+        <div style="text-align:center; margin-bottom: 24px;">
+            <span style="color:var(--text-muted); font-size:13px;">Can't find your product?</span><br>
+            <button class="btn-outline-small mt-2" onclick="showCustomForm()">Add Custom Product</button>
+        </div>
+
+        <!-- The Add Form -->
+        <div class="form-container" id="add-product-form" style="display:none;">
+            <input type="file" id="product-image-upload" accept="image/*" style="display:none" onchange="handleImageUpload(event)">
+            <div class="image-upload-area" id="product-img-preview" onclick="document.getElementById('product-image-upload').click()" style="cursor:pointer;">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <p>Upload Image</p>
+                <span style="font-size:11px; color:var(--text-muted);">Auto-resize & Compress</span>
+            </div>
+            
+            <div class="form-group mt-3">
+                <label>Product Title</label>
+                <input type="text" class="form-control" id="prod-title" placeholder="e.g. Cotton T-Shirt">
+            </div>
+
+            <div class="form-row" style="display:flex; gap:16px;">
+                <div class="form-group" style="flex:1;">
+                    <label>Selling Price (₹)</label>
+                    <input type="number" class="form-control" id="prod-price" placeholder="499">
+                </div>
+                <div class="form-group" style="flex:1;" id="mrp-group">
+                    <label>MRP (₹)</label>
+                    <input type="number" class="form-control" id="prod-mrp" placeholder="999">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Main Category</label>
+                <select class="form-control" id="prod-main-category" onchange="updateSubCategories()">
+                    <option value="products">Products</option>
+                    <option value="services">Services</option>
+                </select>
+            </div>
+
+            <div class="form-group mt-3">
+                <label>Sub Category</label>
+                <select class="form-control" id="prod-sub-category">
+                    <!-- Populated dynamically via Javascript -->
+                </select>
+            </div>
+
+            <div class="form-group mt-3" id="stock-group">
+                <label>Stock Quantity</label>
+                <input type="number" class="form-control" id="prod-stock" placeholder="100" value="10">
+            </div>
+
+            <div class="form-group mt-3">
+                <label>Product Details (Description)</label>
+                <textarea class="form-control" id="prod-description" placeholder="Enter product features, sizes, colors, specifications, etc." rows="3"></textarea>
+            </div>
+
+            <div class="form-group mt-3" id="policies-group">
+                <label>Product Policies</label>
+                <div style="display:flex; flex-direction:column; gap:12px; margin-top:8px;">
+                    <label style="font-size:13px; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="checkbox" id="pol-cod" checked style="accent-color:var(--primary); width:16px; height:16px;">
+                        Cash on Delivery (COD) Available
+                    </label>
+                    <label style="font-size:13px; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="checkbox" id="pol-sdd" checked style="accent-color:var(--primary); width:16px; height:16px;">
+                        Same Day Delivery / Store Pickup
+                    </label>
+                    <label style="font-size:13px; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="checkbox" id="pol-ret" style="accent-color:var(--primary); width:16px; height:16px;">
+                        7 Days Return Policy
+                    </label>
+                    <label style="font-size:13px; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="checkbox" id="pol-war" style="accent-color:var(--primary); width:16px; height:16px;">
+                        1 Year Warranty
+                    </label>
+                </div>
+            </div>
+
+            <button class="btn-primary w-100 mt-3" onclick="submitProductToSupabase()">Send for Approval</button>
+        </div>
+    </template>
+    
+    <template id="tpl-orders">
+        <h2 class="section-title">Recent Orders</h2>
+        <p style="color:var(--text-muted); font-size:14px;">Coming soon...</p>
+    </template>
+
+    <template id="tpl-profile">
+        <h2 class="section-title">Shop Settings</h2>
+        <div class="shop-banner">
+            <button class="edit-banner-btn"><i class="fa-solid fa-camera"></i></button>
+        </div>
+        
+        <div class="form-container" style="margin-top: 16px;">
+            <div class="form-group">
+                <label>Shop Name</label>
+                <input type="text" class="form-control" value="Tech Store Delhi">
+            </div>
+
+            <div class="form-group">
+                <label>GST Number (Optional)</label>
+                <input type="text" class="form-control" placeholder="Enter GSTIN">
+            </div>
+
+            <div class="form-group">
+                <label>Mobile Number (Public for Catalog)</label>
+                <input type="tel" class="form-control" value="+91 9876543210" placeholder="Enter Mobile Number">
+            </div>
+
+            <div class="form-group">
+                <label>Shop Location (Map Pin)</label>
+                <div class="location-picker">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <i class="fa-solid fa-location-dot text-primary" style="font-size:20px;"></i>
+                        <span style="font-size:14px; font-weight:500;">Connaught Place, New Delhi</span>
+                    </div>
+                    <button class="btn-outline-small" style="padding:6px 12px">Map</button>
+                </div>
+            </div>
+
+            <div class="form-group mt-4">
+                <label>Delivery Radius / Visibility</label>
+                <input type="range" min="1" max="50" value="5" class="w-100" style="margin-top:8px; accent-color:var(--primary);" oninput="document.getElementById('radius-val').innerText = this.value + ' km'">
+                <div class="font-bold mt-1" style="text-align:right; color:var(--primary);" id="radius-val">5 km</div>
+            </div>
+
+            <button class="btn-primary w-100 mt-4">Save Changes</button>
+        </div>
+    </template>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/seller.js"></script>
+</body>
+</html>

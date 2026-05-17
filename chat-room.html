@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chat Room</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/chat.css">
+</head>
+<body class="chat-bg">
+    <div id="app-container" style="display:flex; flex-direction:column; height:100vh;">
+        <!-- Header -->
+        <header class="app-header glassmorphism chat-room-header" style="position:fixed; width:100%; max-width:480px; z-index:100;">
+            <div class="header-top" style="align-items:center;">
+                <button class="back-btn-small" onclick="window.location.href='chats.html'"><i class="fa-solid fa-arrow-left"></i></button>
+                <div class="chat-user-info">
+                    <img src="https://ui-avatars.com/api/?name=TS&background=6366f1&color=fff" alt="Seller">
+                    <div class="cu-details">
+                        <h3 id="room-name">Tech Store Delhi</h3>
+                        <span class="status online">Online</span>
+                    </div>
+                </div>
+                <button class="icon-btn" style="width:36px; height:36px; border:none; box-shadow:none;"><i class="fa-solid fa-phone text-primary"></i></button>
+                <button class="icon-btn" style="width:36px; height:36px; border:none; box-shadow:none;"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+            </div>
+            
+            <!-- Reference Product (Context) -->
+            <div class="chat-reference-product">
+                <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=100&q=80" alt="Product">
+                <div class="crp-info">
+                    <h4>Wireless Earbuds Pro</h4>
+                    <span>₹1299</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Messages Area -->
+        <main class="chat-messages" id="messages-container">
+            <div class="msg-date">Today</div>
+            
+            <div class="message msg-received">
+                <div class="msg-bubble">
+                    <p>Hello! Yes, the Wireless Earbuds Pro are available in stock.</p>
+                    <span class="msg-time">10:42 AM</span>
+                </div>
+            </div>
+            
+            <div class="message msg-sent">
+                <div class="msg-bubble">
+                    <p>Great! Can I get them delivered today if I order now?</p>
+                    <span class="msg-time">10:45 AM <i class="fa-solid fa-check-double text-primary"></i></span>
+                </div>
+            </div>
+            
+            <div class="message msg-received">
+                <div class="msg-bubble">
+                    <p>Yes, we do same-day delivery within a 5km radius. It will reach you by 4 PM.</p>
+                    <span class="msg-time">10:48 AM</span>
+                </div>
+            </div>
+        </main>
+
+        <!-- Input Area -->
+        <div class="chat-input-area glassmorphism">
+            <button class="attach-btn"><i class="fa-solid fa-paperclip"></i></button>
+            <input type="text" id="msg-input" placeholder="Type a message..." onkeypress="handleEnter(event)">
+            <button class="send-btn" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/chat.js"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Product Details - Vyapark</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/product-details.css">
+</head>
+<body class="bg-light">
+    <div id="app-container" style="padding-bottom: 0;">
+        <!-- Transparent Header over Image -->
+        <header class="pd-header">
+            <button class="icon-btn-circle" onclick="window.history.back()"><i class="fa-solid fa-arrow-left"></i></button>
+            <div class="pd-header-actions">
+                <button class="icon-btn-circle" onclick="shareWA(event, 'Smart Watch Series 8')"><i class="fa-solid fa-share-nodes"></i></button>
+                <button class="icon-btn-circle" onclick="window.location.href='cart.html'">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-badge-dot">2</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Product Image -->
+        <div class="pd-image-wrapper">
+            <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=800&q=80" alt="Product Image" class="pd-main-img">
+            <div class="pd-image-pagination">
+                <span class="active"></span><span></span><span></span>
+            </div>
+        </div>
+
+        <!-- Product Info Body -->
+        <div class="pd-body glassmorphism-top">
+            <div class="pd-title-row">
+                <h1 class="pd-title">Smart Watch Series 8</h1>
+                <button class="fav-btn active" style="position:static; transform:none; border: 1px solid #ffe4e6;"><i class="fa-solid fa-heart text-danger"></i></button>
+            </div>
+            
+            <div class="pd-price-row mt-2">
+                <span class="pd-price">₹2,499</span>
+                <span class="pd-mrp">₹5,000</span>
+                <span class="pd-discount">50% OFF</span>
+            </div>
+
+            <!-- Seller Info -->
+            <div class="pd-seller-card mt-3" onclick="window.location.href='seller.html'" style="cursor:pointer;">
+                <img src="https://ui-avatars.com/api/?name=GG&background=10b981&color=fff" alt="Seller" class="seller-avatar">
+                <div class="seller-info">
+                    <h4>Gadget Galaxy <i class="fa-solid fa-circle-check text-primary" title="Verified Seller"></i> <i class="fa-solid fa-medal text-warning" title="Golden Badge"></i></h4>
+                    <p><i class="fa-solid fa-location-dot"></i> 2.5 km away | Connaught Place</p>
+                </div>
+                <i class="fa-solid fa-chevron-right text-muted"></i>
+            </div>
+
+            <!-- Details -->
+            <div class="pd-section mt-4">
+                <h3>Product Details</h3>
+                <p class="pd-desc">High-quality smartwatch with heart rate monitoring, step tracking, and IP68 water resistance. Battery lasts up to 7 days on a single charge. Connects with both Android and iOS devices via Bluetooth 5.0.</p>
+            </div>
+
+            <!-- Highlights -->
+            <div class="pd-highlights mt-3">
+                <div class="highlight-item"><i class="fa-solid fa-rotate-left"></i> 7 Days Return</div>
+                <div class="highlight-item"><i class="fa-solid fa-truck-fast"></i> Same Day Delivery</div>
+                <div class="highlight-item"><i class="fa-solid fa-money-bill-1-wave"></i> Cash on Delivery</div>
+                <div class="highlight-item"><i class="fa-solid fa-shield-halved"></i> 1 Year Warranty</div>
+            </div>
+            
+            <!-- Ratings & Reviews -->
+            <div class="pd-section mt-4">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3>Ratings & Reviews</h3>
+                    <span class="text-primary" style="font-size:13px; font-weight:600;">View All</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:12px; margin-top:8px;">
+                    <div style="font-size:32px; font-weight:700;">4.8</div>
+                    <div>
+                        <div style="color:var(--warning); font-size:14px;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i></div>
+                        <p style="font-size:12px; color:var(--text-muted);">(128 reviews)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spacing for bottom bar -->
+            <div style="height: 120px;"></div>
+        </div>
+
+        <!-- Fixed Bottom Action Bar -->
+        <div class="pd-bottom-bar glassmorphism">
+            <button class="btn-outline w-50" onclick="window.location.href='chats.html'" style="display:flex; align-items:center; justify-content:center; gap:8px;"><i class="fa-regular fa-comment-dots text-primary"></i> Chat Seller</button>
+            <button class="btn-primary w-50" onclick="addToCart()" style="display:flex; align-items:center; justify-content:center; gap:8px;"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+        </div>
+    </div>
+    
+    <script>
+        function addToCart() {
+            alert('Item added to cart successfully!');
+        }
+        
+        window.shareWA = function(event, title) {
+            event.stopPropagation();
+            const text = `Hey! Check out ${title} on Vyapark. Download the app now!`;
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+</body>
+</html>

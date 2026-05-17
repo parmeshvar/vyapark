@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vyapark - My Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/profile.css">
+</head>
+<body class="bg-light">
+    <div id="app-container">
+        <!-- Header -->
+        <header class="app-header glassmorphism" style="position:sticky; top:0; z-index:100;">
+            <div class="header-top" style="align-items:center;">
+                <button class="back-btn-small" onclick="window.location.href='index.html'"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2 style="font-size:20px; flex:1; margin-left:12px;">My Profile</h2>
+            </div>
+        </header>
+
+        <main class="profile-main p-3" style="padding-bottom: 90px;">
+            <!-- Profile Header -->
+            <div class="profile-card">
+                <div class="pc-avatar-wrapper">
+                    <img src="https://ui-avatars.com/api/?name=Ravi+Kumar&background=6366f1&color=fff&size=100" alt="Buyer" class="pc-avatar">
+                    <button class="pc-edit-img"><i class="fa-solid fa-camera"></i></button>
+                </div>
+                <div class="pc-details">
+                    <h3>Ravi Kumar</h3>
+                    <p>+91 9876543210</p>
+                    <button class="btn-outline-small mt-2" style="border-radius:20px; font-size:12px;">Edit Profile</button>
+                </div>
+            </div>
+
+            <!-- Profile Menu -->
+            <div class="profile-menu">
+                <a href="#" class="menu-item">
+                    <div class="mi-icon bg-blue-light"><i class="fa-solid fa-box-open text-primary"></i></div>
+                    <div class="mi-text">
+                        <h4>My Orders</h4>
+                        <p>Track your recent orders</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-muted"></i>
+                </a>
+
+                <a href="#" class="menu-item">
+                    <div class="mi-icon bg-pink-light"><i class="fa-solid fa-heart text-secondary"></i></div>
+                    <div class="mi-text">
+                        <h4>Saved Products</h4>
+                        <p>Your wishlist & favorites</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-muted"></i>
+                </a>
+
+                <a href="#" class="menu-item">
+                    <div class="mi-icon bg-green-light"><i class="fa-solid fa-location-dot text-success"></i></div>
+                    <div class="mi-text">
+                        <h4>Saved Addresses</h4>
+                        <p>Home, Office</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-muted"></i>
+                </a>
+            </div>
+
+            <div class="profile-menu mt-3">
+                <a href="seller.html" class="menu-item become-seller-card">
+                    <div class="mi-icon bg-orange-light"><i class="fa-solid fa-shop text-warning"></i></div>
+                    <div class="mi-text">
+                        <h4>Become a Seller</h4>
+                        <p class="text-primary" style="font-weight:600;">Start selling on Vyapark!</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-primary"></i>
+                </a>
+            </div>
+
+            <div class="profile-menu mt-3">
+                <a href="#" class="menu-item">
+                    <div class="mi-icon bg-gray-light"><i class="fa-solid fa-headset text-main"></i></div>
+                    <div class="mi-text">
+                        <h4>Help & Support</h4>
+                        <p>Contact customer care</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-muted"></i>
+                </a>
+                
+                <a href="auth.html" class="menu-item text-danger">
+                    <div class="mi-icon bg-red-light"><i class="fa-solid fa-arrow-right-from-bracket text-danger"></i></div>
+                    <div class="mi-text">
+                        <h4 class="text-danger">Logout</h4>
+                    </div>
+                </a>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

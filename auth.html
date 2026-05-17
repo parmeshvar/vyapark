@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vyapark - Login & Signup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+    <div id="app-container" class="auth-container">
+        
+        <!-- Step 1: Initial Login / Phone Entry -->
+        <div class="auth-step active" id="step-phone">
+            <div class="auth-header">
+                <h2>Welcome to <span class="text-primary">Vyapark</span></h2>
+                <p>Your local marketplace for everything</p>
+            </div>
+            
+            <div class="auth-illustration">
+                <i class="fa-solid fa-store text-primary"></i>
+            </div>
+
+            <div class="auth-form">
+                <div class="input-group">
+                    <span class="prefix">+91</span>
+                    <input type="tel" id="phone-input" placeholder="Enter mobile number" maxlength="10">
+                </div>
+                <button class="btn-primary w-100" onclick="sendOTP()">Continue with Phone</button>
+                
+                <div class="divider"><span>OR</span></div>
+                
+                <button class="btn-outline w-100 google-btn" onclick="nextStep('step-role')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google">
+                    Continue with Google
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 2: OTP Verification -->
+        <div class="auth-step" id="step-otp">
+            <button class="back-btn" onclick="prevStep('step-phone')"><i class="fa-solid fa-arrow-left"></i></button>
+            <div class="auth-header">
+                <h2>Verify <span class="text-primary">OTP</span></h2>
+                <p>Code sent to <span id="display-phone" class="font-bold">+91 9999999999</span></p>
+            </div>
+            
+            <div class="otp-inputs">
+                <input type="text" maxlength="1" class="otp-box">
+                <input type="text" maxlength="1" class="otp-box">
+                <input type="text" maxlength="1" class="otp-box">
+                <input type="text" maxlength="1" class="otp-box">
+            </div>
+            
+            <button class="btn-primary w-100 mt-4" onclick="verifyOTP()">Verify & Continue</button>
+            <p class="resend-text">Didn't receive code? <a href="#">Resend (30s)</a></p>
+        </div>
+
+        <!-- Step 3: Role Selection -->
+        <div class="auth-step" id="step-role">
+            <div class="auth-header">
+                <h2>How do you want to use <span class="text-primary">Vyapark?</span></h2>
+                <p>You can change this later</p>
+            </div>
+
+            <div class="role-selector">
+                <label class="role-card" onclick="selectRole('buyer')">
+                    <input type="radio" name="role" value="buyer">
+                    <div class="role-content">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                        <h3>Buyer</h3>
+                        <p>I want to buy local products</p>
+                    </div>
+                </label>
+                
+                <label class="role-card" onclick="selectRole('seller')">
+                    <input type="radio" name="role" value="seller">
+                    <div class="role-content">
+                        <i class="fa-solid fa-shop"></i>
+                        <h3>Seller</h3>
+                        <p>I want to sell my products</p>
+                    </div>
+                </label>
+
+                <label class="role-card" onclick="selectRole('both')">
+                    <input type="radio" name="role" value="both">
+                    <div class="role-content">
+                        <i class="fa-solid fa-people-arrows"></i>
+                        <h3>Both</h3>
+                        <p>I want to buy and sell</p>
+                    </div>
+                </label>
+            </div>
+
+            <button class="btn-primary w-100 mt-4" onclick="nextStep('step-profile')">Continue</button>
+        </div>
+
+        <!-- Step 4: Profile Details -->
+        <div class="auth-step" id="step-profile">
+            <button class="back-btn" onclick="prevStep('step-role')"><i class="fa-solid fa-arrow-left"></i></button>
+            <div class="auth-header">
+                <h2>Complete your <span class="text-primary">Profile</span></h2>
+                <p>Just a few more details</p>
+            </div>
+
+            <div class="profile-upload">
+                <div class="avatar-preview">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <button class="btn-outline-small">Upload Photo</button>
+            </div>
+
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" class="form-control" id="profile-name" placeholder="John Doe">
+            </div>
+
+            <div class="form-group">
+                <label>Pincode</label>
+                <input type="text" class="form-control" id="profile-pincode" placeholder="e.g. 110001">
+            </div>
+
+            <div class="form-group">
+                <label>Full Address</label>
+                <textarea class="form-control" id="profile-address" placeholder="House No, Street, Landmark" rows="2"></textarea>
+            </div>
+
+            <button class="btn-primary w-100 mt-4" onclick="finishSetup()">Get Started <i class="fa-solid fa-arrow-right ml-2"></i></button>
+        </div>
+        
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

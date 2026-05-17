@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vyapark - Super Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+    <!-- Desktop-focused layout, but responsive -->
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar glassmorphism">
+            <div class="sidebar-brand">
+                <h2>Vyapark <span>Admin</span></h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-link active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="#" class="nav-link"><i class="fa-solid fa-shop"></i> Manage Sellers</a>
+                <a href="#" class="nav-link"><i class="fa-solid fa-users"></i> Manage Buyers</a>
+                <a href="#" class="nav-link"><i class="fa-solid fa-clipboard-list"></i> Orders & Finance</a>
+                <a href="#" class="nav-link"><i class="fa-solid fa-bullhorn"></i> Marketing & Promos</a>
+                <a href="#" class="nav-link"><i class="fa-solid fa-gear"></i> Platform Settings</a>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="btn-outline w-100" style="color:var(--danger); border-color:var(--danger);"><i class="fa-solid fa-power-off"></i> Logout</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <header class="admin-header glassmorphism">
+                <div class="header-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Search sellers, orders, or users...">
+                </div>
+                <div class="header-user">
+                    <span class="notification-bell"><i class="fa-regular fa-bell"></i><span class="badge">3</span></span>
+                    <div class="admin-profile">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=6366f1&color=fff" alt="Admin">
+                        <span>Super Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="admin-content-area">
+                <h1 class="page-title">Platform Overview</h1>
+                
+                <!-- KPI Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon" style="color:var(--primary); background:rgba(99,102,241,0.1);"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+                        <div class="kpi-info">
+                            <p>Total Platform Revenue</p>
+                            <h3>₹12,45,000</h3>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon" style="color:var(--success); background:rgba(16,185,129,0.1);"><i class="fa-solid fa-shop"></i></div>
+                        <div class="kpi-info">
+                            <p>Active Sellers</p>
+                            <h3>142</h3>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon" style="color:var(--warning); background:rgba(245,158,11,0.1);"><i class="fa-solid fa-users"></i></div>
+                        <div class="kpi-info">
+                            <p>Total Buyers</p>
+                            <h3>4,850</h3>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon" style="color:var(--secondary); background:rgba(236,72,153,0.1);"><i class="fa-solid fa-cart-flatbed"></i></div>
+                        <div class="kpi-info">
+                            <p>Orders Today</p>
+                            <h3>356</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Approvals Section -->
+                <div class="grid-half mt-4">
+                    <!-- Pending Seller Approvals -->
+                    <div class="admin-panel">
+                        <div class="panel-header">
+                            <h3>Seller Approvals</h3>
+                            <button class="btn-text">View All</button>
+                        </div>
+                        <div class="panel-body">
+                            <div class="approval-item">
+                                <img src="https://ui-avatars.com/api/?name=FM&background=10b981&color=fff" alt="Seller">
+                                <div class="ai-info">
+                                    <h4>Fresh Mart Grocery</h4>
+                                    <p>GST: 07AABCU9603R1ZX</p>
+                                    <label style="font-size:11px; display:flex; align-items:center; gap:4px; margin-top:4px; cursor:pointer;">
+                                        <input type="checkbox" checked style="accent-color:var(--warning);"> <i class="fa-solid fa-medal text-warning"></i> Golden Badge
+                                    </label>
+                                </div>
+                                <div class="ai-actions">
+                                    <button class="btn-success-small" title="Approve Seller" onclick="alert('Seller Approved & Live!')"><i class="fa-solid fa-check"></i></button>
+                                    <button class="btn-danger-small" title="Reject Seller"><i class="fa-solid fa-xmark"></i></button>
+                                </div>
+                            </div>
+                            <div class="approval-item">
+                                <img src="https://ui-avatars.com/api/?name=EM&background=ec4899&color=fff" alt="Seller">
+                                <div class="ai-info">
+                                    <h4>Electro Max</h4>
+                                    <p>GST: Pending</p>
+                                    <label style="font-size:11px; display:flex; align-items:center; gap:4px; margin-top:4px; cursor:pointer;">
+                                        <input type="checkbox" style="accent-color:var(--warning);"> <i class="fa-solid fa-medal text-warning"></i> Golden Badge
+                                    </label>
+                                </div>
+                                <div class="ai-actions">
+                                    <button class="btn-success-small" title="Approve Seller" onclick="alert('Seller Approved & Live!')"><i class="fa-solid fa-check"></i></button>
+                                    <button class="btn-danger-small" title="Reject Seller"><i class="fa-solid fa-xmark"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pending Product Approvals -->
+                    <div class="admin-panel">
+                        <div class="panel-header">
+                            <h3>Product Approvals</h3>
+                            <button class="btn-text">View All</button>
+                        </div>
+                        <div class="panel-body">
+                            <div class="approval-item">
+                                <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=100&q=80" alt="Product">
+                                <div class="ai-info">
+                                    <h4>Smart Watch Series 8</h4>
+                                    <p>By: Gadget Galaxy | ₹2,499</p>
+                                </div>
+                                <div class="ai-actions">
+                                    <button class="btn-success-small" title="Approve Product" onclick="alert('Product is now LIVE!')"><i class="fa-solid fa-check"></i></button>
+                                    <button class="btn-danger-small" title="Reject Product"><i class="fa-solid fa-xmark"></i></button>
+                                </div>
+                            </div>
+                            <div class="approval-item">
+                                <img src="https://images.unsplash.com/photo-1560806887-1e4cd0b6f46d?w=100&q=80" alt="Product">
+                                <div class="ai-info">
+                                    <h4>Organic Apples (1kg)</h4>
+                                    <p>By: Fresh Mart | ₹150</p>
+                                </div>
+                                <div class="ai-actions">
+                                    <button class="btn-success-small" title="Approve Product" onclick="alert('Product is now LIVE!')"><i class="fa-solid fa-check"></i></button>
+                                    <button class="btn-danger-small" title="Reject Product"><i class="fa-solid fa-xmark"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions -->
+                <div class="dashboard-grid mt-4" style="grid-template-columns: 1fr;">
+                    <div class="admin-panel">
+                        <div class="panel-header">
+                            <h3>Recent Transactions</h3>
+                        </div>
+                        <div class="panel-body">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Seller</th>
+                                        <th>Buyer</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#TM-9876</td>
+                                        <td>Tech Store Delhi</td>
+                                        <td>Ravi Kumar</td>
+                                        <td>₹1,299</td>
+                                        <td><span class="status-badge success">Completed</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>#TM-9875</td>
+                                        <td>Fashion Hub</td>
+                                        <td>Sunita Sharma</td>
+                                        <td>₹499</td>
+                                        <td><span class="status-badge pending">Pending</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>#TM-9874</td>
+                                        <td>Gadget Galaxy</td>
+                                        <td>Amit Singh</td>
+                                        <td>₹2,499</td>
+                                        <td><span class="status-badge success">Completed</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

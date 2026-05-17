@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vyapark - Map View</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Leaflet CSS for Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/map.css">
+</head>
+<body>
+    <div id="app-container" class="map-app">
+        <!-- Floating Header/Search -->
+        <div class="map-search-container glassmorphism">
+            <button class="back-btn-small" onclick="window.location.href='index.html'"><i class="fa-solid fa-arrow-left"></i></button>
+            <div class="map-search-input">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Search products nearby...">
+            </div>
+            <button class="filter-btn"><i class="fa-solid fa-sliders"></i></button>
+        </div>
+
+        <!-- Filter Chips -->
+        <div class="map-filters">
+            <span class="filter-chip active">All</span>
+            <span class="filter-chip">Electronics</span>
+            <span class="filter-chip">Fashion</span>
+            <span class="filter-chip">Groceries</span>
+            <span class="filter-chip">Within 5km</span>
+        </div>
+
+        <!-- Map Container -->
+        <div id="map-view"></div>
+
+        <!-- Bottom Product Detail Card (Hidden by default) -->
+        <div id="product-bottom-sheet" class="bottom-sheet glassmorphism">
+            <div class="drag-handle"></div>
+            <div class="sheet-content">
+                <div class="sheet-header">
+                    <img src="" id="sheet-img" alt="Product">
+                    <div class="sheet-info">
+                        <h3 id="sheet-title">Product Name</h3>
+                        <p id="sheet-seller" class="seller-name"><i class="fa-solid fa-shop"></i> Seller Name</p>
+                        <div class="price-row">
+                            <span class="price text-primary" id="sheet-price">₹0</span>
+                            <span class="distance" id="sheet-dist"><i class="fa-solid fa-location-arrow"></i> 0 km</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="sheet-actions mt-4">
+                    <button class="btn-outline w-100"><i class="fa-solid fa-directions"></i> Get Directions</button>
+                    <button class="btn-primary w-100"><i class="fa-solid fa-comment-dots"></i> Chat Seller</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Target Button -->
+        <button class="my-location-btn"><i class="fa-solid fa-crosshairs"></i></button>
+    </div>
+
+    <!-- Leaflet JS for Maps -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/map.js"></script>
+</body>
+</html>
