@@ -1,3 +1,10 @@
+// Price Formatter (shared utility)
+function formatPrice(amount) {
+    const n = parseFloat(amount);
+    if (isNaN(n)) return '0';
+    return n % 1 === 0 ? Math.round(n).toLocaleString('en-IN') : parseFloat(n.toFixed(2)).toLocaleString('en-IN');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize Dashboard Tab by default
     switchTab('dashboard', document.querySelector('.nav-item.active'));
@@ -30,6 +37,10 @@ function switchTab(tabId, navElement) {
         } else if (tabId === 'add') {
             setTimeout(() => {
                 if (typeof updateSubCategories === 'function') updateSubCategories();
+            }, 50);
+        } else if (tabId === 'profile') {
+            setTimeout(() => {
+                initShopSettings();
             }, 50);
         }
     }
@@ -193,7 +204,7 @@ window.submitProductToSupabase = async function() {
     const title = document.getElementById('prod-title').value.trim();
     const price = parseFloat(document.getElementById('prod-price').value);
     const mrp = parseFloat(document.getElementById('prod-mrp').value);
-    const category = document.getElementById('prod-category').value;
+    const category = document.getElementById('prod-sub-category').value;  // FIXED: was 'prod-category'
     const stock = parseInt(document.getElementById('prod-stock').value) || 10;
     
     const cod = document.getElementById('pol-cod').checked;
@@ -303,7 +314,7 @@ window.renderSellerProducts = async function() {
                 <div class="spi-info" style="flex:1; margin-left:12px;">
                     <h4 style="margin:0 0 4px 0; font-size:14px; font-weight:600; color:var(--text-main);">${item.title}</h4>
                     <div class="spi-price" style="font-size:13px; font-weight:700; color:var(--primary);">
-                        ₹${item.price} 
+                        ₹${formatPrice(item.price)} 
                         <span class="stock ${item.is_approved ? 'text-success' : 'text-warning'}" style="font-size:11px; margin-left:8px; font-weight:600;">
                             ${item.is_approved ? 'Live' : 'Pending'}
                         </span>
@@ -385,4 +396,162 @@ window.updateSubCategories = function() {
     }
     
     subCatSelect.innerHTML = options.map(opt => `<option value="${opt}">${opt}</option>`).join('');
+};
+
+// ========================================================
+// Shop Settings (Map Pin & Profile Update)
+// ========================================================
+
+async function initShopSettings() {
+    let userId = localStorage.getItem('vyapark_user_id');
+    let profile = null;
+    
+    try {
+        const session = (await supabase.auth.getSession()).data.session;
+        if (session) userId = session.user.id;
+        
+        if (userId) {
+            const { data } = await supabase.from('profiles').select('*').eq('id', userId).maybeSingle();
+            if (data) profile = data;
+        }
+    } catch(e) { console.warn("Supabase fetch profile fail, using local settings:", e); }
+    
+    if (!profile && userId) {
+        try {
+            const local = JSON.parse(localStorage.getItem('vyapark_local_profile'));
+            if (local && local.id === userId) profile = local;
+        } catch(e) {}
+    }
+    
+    if (profile) {
+        document.getElementById('sett-shop-name').value = profile.shop_name || profile.full_name || '';
+        document.getElementById('sett-gst').value = profile.gst_number || '';
+        document.getElementById('sett-phone').value = profile.phone || '';
+        document.getElementById('sett-radius').value = profile.delivery_radius || 5;
+        document.getElementById('radius-val').innerText = (profile.delivery_radius || 5) + ' km';
+        
+        if (profile.location_lat && profile.location_lng) {
+            document.getElementById('sett-lat').value = profile.location_lat;
+            document.getElementById('sett-lng').value = profile.location_lng;
+            document.getElementById('sett-location-text').innerText = `${parseFloat(profile.location_lat).toFixed(4)}, ${parseFloat(profile.location_lng).toFixed(4)} (Coordinates Pinned)`;
+        }
+    }
+}
+
+window.toggleSettingsMap = function() {
+    const mapDiv = document.getElementById('settings-map');
+    const latInput = document.getElementById('sett-lat');
+    const lngInput = document.getElementById('sett-lng');
+    const statusText = document.getElementById('sett-location-text');
+    
+    if (mapDiv.style.display === 'block') {
+        mapDiv.style.display = 'none';
+        return;
+    }
+    
+    mapDiv.style.display = 'block';
+    
+    let lat = parseFloat(latInput.value);
+    let lng = parseFloat(lngInput.value);
+    
+    const isNew = isNaN(lat) || isNaN(lng);
+    if (isNew) {
+        // Fallback to Delhi center if no coords exist
+        lat = 28.6139;
+        lng = 77.2090;
+    }
+    
+    setTimeout(() => {
+        if (!window.settingsMapObj) {
+            window.settingsMapObj = L.map('settings-map').setView([lat, lng], 14);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap'
+            }).addTo(window.settingsMapObj);
+            
+            window.settingsMarkerObj = L.marker([lat, lng], { draggable: true }).addTo(window.settingsMapObj);
+            
+            window.settingsMarkerObj.on('dragend', async function(e) {
+                const pos = e.target.getLatLng();
+                latInput.value = pos.lat;
+                lngInput.value = pos.lng;
+                statusText.innerText = `${pos.lat.toFixed(4)}, ${pos.lng.toFixed(4)} (Pin Updated)`;
+            });
+        } else {
+            window.settingsMapObj.setView([lat, lng], 14);
+            window.settingsMarkerObj.setLatLng([lat, lng]);
+        }
+        
+        if (isNew && navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(pos => {
+                const myLat = pos.coords.latitude;
+                const myLng = pos.coords.longitude;
+                latInput.value = myLat;
+                lngInput.value = myLng;
+                statusText.innerText = `${myLat.toFixed(4)}, ${myLng.toFixed(4)} (Current Location)`;
+                window.settingsMapObj.setView([myLat, myLng], 15);
+                window.settingsMarkerObj.setLatLng([myLat, myLng]);
+            });
+        }
+    }, 100);
+};
+
+window.saveShopSettings = async function() {
+    const shopName = document.getElementById('sett-shop-name').value.trim();
+    const gst = document.getElementById('sett-gst').value.trim();
+    const phone = document.getElementById('sett-phone').value.trim();
+    const radius = parseInt(document.getElementById('sett-radius').value);
+    const lat = parseFloat(document.getElementById('sett-lat').value);
+    const lng = parseFloat(document.getElementById('sett-lng').value);
+    
+    if (!shopName) {
+        alert("Shop Name cannot be empty.");
+        return;
+    }
+    
+    const btn = document.querySelector('button[onclick="saveShopSettings()"]');
+    btn.disabled = true;
+    btn.innerText = "Saving...";
+    
+    let userId = localStorage.getItem('vyapark_user_id');
+    const updateData = {
+        shop_name: shopName,
+        gst_number: gst || null,
+        phone: phone || null,
+        delivery_radius: radius
+    };
+    
+    if (!isNaN(lat) && !isNaN(lng)) {
+        updateData.location_lat = lat;
+        updateData.location_lng = lng;
+    }
+
+    try {
+        const session = (await supabase.auth.getSession()).data.session;
+        if (session) userId = session.user.id;
+        
+        if (userId) {
+            const { error } = await supabase.from('profiles').update(updateData).eq('id', userId);
+            if (error) throw error;
+        }
+    } catch(e) {
+        console.warn("DB update failed, using localStorage fallback:", e);
+    }
+    
+    // Always keep LocalStorage in sync
+    if (userId) {
+        let local = {};
+        try {
+            local = JSON.parse(localStorage.getItem('vyapark_local_profile') || '{}');
+        } catch(err) {}
+        const merged = { ...local, ...updateData, id: userId };
+        localStorage.setItem('vyapark_local_profile', JSON.stringify(merged));
+        
+        // Update header shop name instantly
+        const headerTitle = document.querySelector('.header-top h2');
+        if (headerTitle) headerTitle.innerText = shopName;
+    }
+    
+    alert("Shop Settings saved successfully! 🎉");
+    btn.disabled = false;
+    btn.innerText = "Save Changes";
 };

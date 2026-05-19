@@ -9,6 +9,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/seller.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
     <div id="app-container" class="seller-app">
@@ -280,37 +282,40 @@
         <div class="form-container" style="margin-top: 16px;">
             <div class="form-group">
                 <label>Shop Name</label>
-                <input type="text" class="form-control" value="Tech Store Delhi">
+                <input type="text" class="form-control" id="sett-shop-name" value="Tech Store Delhi">
             </div>
 
             <div class="form-group">
                 <label>GST Number (Optional)</label>
-                <input type="text" class="form-control" placeholder="Enter GSTIN">
+                <input type="text" class="form-control" id="sett-gst" placeholder="Enter GSTIN">
             </div>
 
             <div class="form-group">
                 <label>Mobile Number (Public for Catalog)</label>
-                <input type="tel" class="form-control" value="+91 9876543210" placeholder="Enter Mobile Number">
+                <input type="tel" class="form-control" id="sett-phone" value="+91 9876543210" placeholder="Enter Mobile Number">
             </div>
 
             <div class="form-group">
                 <label>Shop Location (Map Pin)</label>
                 <div class="location-picker">
-                    <div style="display:flex; align-items:center; gap:8px;">
+                    <div style="display:flex; align-items:center; gap:8px; flex:1;">
                         <i class="fa-solid fa-location-dot text-primary" style="font-size:20px;"></i>
-                        <span style="font-size:14px; font-weight:500;">Connaught Place, New Delhi</span>
+                        <span id="sett-location-text" style="font-size:14px; font-weight:500;">Connaught Place, New Delhi</span>
                     </div>
-                    <button class="btn-outline-small" style="padding:6px 12px">Map</button>
+                    <button class="btn-outline-small" onclick="toggleSettingsMap()" style="padding:6px 12px">📍 Pin Map</button>
                 </div>
+                <div id="settings-map" style="width: 100%; height: 180px; border-radius: 8px; margin-top: 10px; display: none; z-index:1;"></div>
+                <input type="hidden" id="sett-lat">
+                <input type="hidden" id="sett-lng">
             </div>
 
             <div class="form-group mt-4">
                 <label>Delivery Radius / Visibility</label>
-                <input type="range" min="1" max="50" value="5" class="w-100" style="margin-top:8px; accent-color:var(--primary);" oninput="document.getElementById('radius-val').innerText = this.value + ' km'">
+                <input type="range" id="sett-radius" min="1" max="50" value="5" class="w-100" style="margin-top:8px; accent-color:var(--primary);" oninput="document.getElementById('radius-val').innerText = this.value + ' km'">
                 <div class="font-bold mt-1" style="text-align:right; color:var(--primary);" id="radius-val">5 km</div>
             </div>
 
-            <button class="btn-primary w-100 mt-4">Save Changes</button>
+            <button class="btn-primary w-100 mt-4" onclick="saveShopSettings()">Save Changes</button>
         </div>
     </template>
 

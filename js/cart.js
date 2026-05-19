@@ -51,10 +51,42 @@ function setDelivery(type) {
     bottomTotal.innerText = `₹${currentTotal}`;
 }
 
-function placeOrder() {
+async function placeOrder() {
     const deliveryMethod = document.querySelector('input[name="delivery"]:checked').value;
     const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
     
+    const btn = document.querySelector('.checkout-bottom-bar .btn-primary');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+
+    // Mock Order Data
+    const orderData = {
+        buyer_id: localStorage.getItem('vyapark_user_id') || 'guest_buyer',
+        seller_id: 'sample_seller', // Would come from cart items in real app
+        total_amount: currentTotal,
+        commission_amount: currentTotal * 0.10, // 10% commission
+        gst_amount: currentTotal * 0.18, // 18% GST
+        status: 'pending',
+        payment_method: paymentMethod,
+        delivery_address: deliveryMethod === 'home' ? '123, Model Town, New Delhi' : 'Store Pickup'
+    };
+
+    try {
+        if (window.supabase) {
+            const { error } = await supabase.from('orders').insert([orderData]);
+            if (error) throw error;
+        } else {
+            throw new Error("Supabase not loaded");
+        }
+    } catch(e) {
+        console.warn("Order saved locally due to DB error:", e);
+        let localOrders = JSON.parse(localStorage.getItem('vyapark_local_orders') || '[]');
+        orderData.id = crypto.randomUUID ? crypto.randomUUID() : 'ord-' + Date.now();
+        orderData.created_at = new Date().toISOString();
+        localOrders.push(orderData);
+        localStorage.setItem('vyapark_local_orders', JSON.stringify(localOrders));
+    }
+
     const modal = document.getElementById('success-modal');
     const msg = document.getElementById('success-msg');
     const dirBtn = document.getElementById('direction-btn');
@@ -75,5 +107,11 @@ function placeOrder() {
         dirBtn.style.display = 'none';
     }
     
+    // Clear cart count
+    document.querySelector('.header-top span').innerText = '0 Items';
+    document.querySelectorAll('.cart-item').forEach(el => el.style.display = 'none');
+    
+    btn.innerHTML = 'Place Order <i class="fa-solid fa-arrow-right ml-2"></i>';
+    btn.disabled = false;
     modal.classList.remove('hidden');
 }

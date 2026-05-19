@@ -1,3 +1,13 @@
+// ====================================
+// Price Formatter — max 2 decimal paise digits
+// ====================================
+function formatPrice(amount) {
+    const n = parseFloat(amount);
+    if (isNaN(n)) return '0';
+    // If whole number → no decimals. Otherwise fix to 2 decimal places.
+    return n % 1 === 0 ? Math.round(n).toLocaleString('en-IN') : parseFloat(n.toFixed(2)).toLocaleString('en-IN');
+}
+
 // Database for Products and Services
 const db = {
     products: {
@@ -173,6 +183,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const lat = position.coords.latitude;
                 const lon = position.coords.longitude;
                 
+                // Save for distance calculations on other pages
+                localStorage.setItem('buyer_lat', lat);
+                localStorage.setItem('buyer_lng', lon);
+                
                 try {
                     const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
                     const data = await res.json();
@@ -221,7 +235,7 @@ function handleLiveSearch(val) {
                 <img src="${item.image}" alt="${item.title}">
                 <div class="sdi-info">
                     <div class="sdi-title">${item.title}</div>
-                    <div class="sdi-meta">₹${item.price} • ${item.seller}</div>
+                    <div class="sdi-meta">₹${formatPrice(item.price)} • ${item.seller}</div>
                 </div>
                 <i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i>
             </div>
@@ -307,8 +321,8 @@ function renderApp(filterText = "") {
                         ${item.verified ? '<i class="fa-solid fa-circle-check text-primary" title="Verified"></i>' : ''}
                     </div>
                     <div class="product-price-row">
-                        <span class="price">₹${item.price}</span>
-                        <span class="mrp">₹${item.mrp}</span>
+                        <span class="price">₹${formatPrice(item.price)}</span>
+                        <span class="mrp">₹${formatPrice(item.mrp)}</span>
                         <span class="discount">${item.discount} OFF</span>
                     </div>
                     <div class="product-footer">

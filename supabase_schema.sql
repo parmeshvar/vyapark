@@ -61,3 +61,20 @@ ALTER TABLE public.profiles DISABLE ROW LEVEL SECURITY;
 ALTER TABLE public.products DISABLE ROW LEVEL SECURITY;
 ALTER TABLE public.services DISABLE ROW LEVEL SECURITY;
 ALTER TABLE public.messages DISABLE ROW LEVEL SECURITY;
+
+-- 6. ORDERS TABLE (Stores transactions and commission tracking)
+CREATE TABLE IF NOT EXISTS public.orders (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  buyer_id uuid REFERENCES public.profiles(id) ON DELETE CASCADE,
+  seller_id uuid REFERENCES public.profiles(id) ON DELETE CASCADE,
+  product_id uuid REFERENCES public.products(id) ON DELETE SET NULL,
+  total_amount numeric NOT null,
+  commission_amount numeric NOT null, -- Vyapark's cut
+  gst_amount numeric NOT null,
+  status text DEFAULT 'pending', -- 'pending', 'processing', 'shipped', 'delivered', 'cancelled'
+  payment_method text DEFAULT 'cod',
+  delivery_address text,
+  created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT null
+);
+
+ALTER TABLE public.orders DISABLE ROW LEVEL SECURITY;

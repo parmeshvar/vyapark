@@ -18,15 +18,15 @@
                 <h2>Vyapark <span>Admin</span></h2>
             </div>
             <nav class="sidebar-nav">
-                <a href="#" class="nav-link active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
-                <a href="#" class="nav-link"><i class="fa-solid fa-shop"></i> Manage Sellers</a>
-                <a href="#" class="nav-link"><i class="fa-solid fa-users"></i> Manage Buyers</a>
-                <a href="#" class="nav-link"><i class="fa-solid fa-clipboard-list"></i> Orders & Finance</a>
-                <a href="#" class="nav-link"><i class="fa-solid fa-bullhorn"></i> Marketing & Promos</a>
-                <a href="#" class="nav-link"><i class="fa-solid fa-gear"></i> Platform Settings</a>
+                <a href="#" class="nav-link active" data-tab="dashboard"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="#" class="nav-link" data-tab="sellers"><i class="fa-solid fa-shop"></i> Manage Sellers</a>
+                <a href="#" class="nav-link" data-tab="buyers"><i class="fa-solid fa-users"></i> Manage Buyers</a>
+                <a href="#" class="nav-link" data-tab="orders"><i class="fa-solid fa-clipboard-list"></i> Orders & Finance</a>
+                <a href="#" class="nav-link" data-tab="marketing"><i class="fa-solid fa-bullhorn"></i> Marketing & Promos</a>
+                <a href="#" class="nav-link" data-tab="settings"><i class="fa-solid fa-gear"></i> Platform Settings</a>
             </nav>
             <div class="sidebar-footer">
-                <button class="btn-outline w-100" style="color:var(--danger); border-color:var(--danger);"><i class="fa-solid fa-power-off"></i> Logout</button>
+                <button class="btn-outline w-100" style="color:var(--danger); border-color:var(--danger);" onclick="doAdminLogout()"><i class="fa-solid fa-power-off"></i> Logout</button>
             </div>
         </aside>
 
@@ -47,36 +47,38 @@
             </header>
 
             <div class="admin-content-area">
-                <h1 class="page-title">Platform Overview</h1>
+                <!-- Dashboard Tab -->
+                <div id="dashboard" class="tab-section active">
+                    <h1 class="page-title">Platform Overview</h1>
                 
                 <!-- KPI Cards -->
                 <div class="kpi-grid">
-                    <div class="kpi-card">
+                    <div class="kpi-card" onclick="openAdminTab('orders')" style="cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
                         <div class="kpi-icon" style="color:var(--primary); background:rgba(99,102,241,0.1);"><i class="fa-solid fa-indian-rupee-sign"></i></div>
                         <div class="kpi-info">
                             <p>Total Platform Revenue</p>
-                            <h3>₹12,45,000</h3>
+                            <h3 id="total-revenue-kpi">₹0</h3>
                         </div>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" onclick="openAdminTab('sellers')" style="cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
                         <div class="kpi-icon" style="color:var(--success); background:rgba(16,185,129,0.1);"><i class="fa-solid fa-shop"></i></div>
                         <div class="kpi-info">
                             <p>Active Sellers</p>
-                            <h3>142</h3>
+                            <h3 id="active-sellers-kpi">0</h3>
                         </div>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" onclick="openAdminTab('buyers')" style="cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
                         <div class="kpi-icon" style="color:var(--warning); background:rgba(245,158,11,0.1);"><i class="fa-solid fa-users"></i></div>
                         <div class="kpi-info">
                             <p>Total Buyers</p>
-                            <h3>4,850</h3>
+                            <h3 id="total-buyers-kpi">0</h3>
                         </div>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" onclick="openAdminTab('orders')" style="cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
                         <div class="kpi-icon" style="color:var(--secondary); background:rgba(236,72,153,0.1);"><i class="fa-solid fa-cart-flatbed"></i></div>
                         <div class="kpi-info">
                             <p>Orders Today</p>
-                            <h3>356</h3>
+                            <h3 id="orders-today-kpi">0</h3>
                         </div>
                     </div>
                 </div>
@@ -198,9 +200,235 @@
                         </div>
                     </div>
                 </div>
+                </div> <!-- End Dashboard Tab -->
+
+                <!-- Manage Sellers Tab -->
+                <div id="sellers" class="tab-section" style="display:none;">
+                    <h1 class="page-title">Manage Sellers</h1>
+                    <div class="admin-panel">
+                        <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); margin-bottom: 0;">
+                            <h3 style="margin:0;">All Registered Sellers</h3>
+                            <div class="header-search" style="width:250px; background:var(--background); padding: 8px 15px; border-radius: 20px; border: 1px solid var(--border-color); display:flex; align-items:center; gap:8px;">
+                                <i class="fa-solid fa-magnifying-glass" style="color:var(--text-muted);"></i>
+                                <input type="text" id="seller-search" placeholder="Search sellers..." style="border:none; background:transparent; outline:none; color:var(--text-color); width:100%; font-size:14px;">
+                            </div>
+                        </div>
+                        <div class="panel-body" style="padding: 0; overflow-x: auto;">
+                            <table class="admin-table" style="width: 100%; border-collapse: collapse;">
+                                <thead style="background: rgba(0,0,0,0.02);">
+                                    <tr>
+                                        <th style="padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color);">Profile</th>
+                                        <th style="padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color);">Shop Name</th>
+                                        <th style="padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color);">Contact Info</th>
+                                        <th style="padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color);">Status</th>
+                                        <th style="padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color);">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="all-sellers-table-body">
+                                    <tr><td colspan="5" style="text-align:center; padding:30px; color:var(--text-muted);">Loading sellers...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Manage Buyers Tab -->
+                <div id="buyers" class="tab-section" style="display:none;">
+                    <h1 class="page-title">Manage Buyers</h1>
+                    <div class="admin-panel">
+                        <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); margin-bottom: 0;">
+                            <h3 style="margin:0;">All Registered Buyers</h3>
+                            <div class="header-search" style="width:250px; background:var(--background); padding: 8px 15px; border-radius: 20px; border: 1px solid var(--border-color); display:flex; align-items:center; gap:8px;">
+                                <i class="fa-solid fa-magnifying-glass" style="color:var(--text-muted);"></i>
+                                <input type="text" id="buyer-search" placeholder="Search buyers..." style="border:none; background:transparent; outline:none; color:var(--text-color); width:100%; font-size:14px;">
+                            </div>
+                        </div>
+                        <div class="panel-body" style="padding: 0; overflow-x: auto;">
+                            <table class="admin-table" style="width: 100%; border-collapse: collapse;">
+                                <thead style="background: rgba(0,0,0,0.02);">
+                                    <tr>
+                                        <th style="padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color);">Buyer Name</th>
+                                        <th style="padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color);">Contact Info</th>
+                                        <th style="padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color);">Registration Date</th>
+                                        <th style="padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color);">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="all-buyers-table-body">
+                                    <tr><td colspan="4" style="text-align:center; padding:30px; color:var(--text-muted);">Loading buyers...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders & Finance Tab -->
+                <div id="orders" class="tab-section" style="display:none;">
+                    <h1 class="page-title">Orders & Finance</h1>
+                    
+                    <div class="kpi-grid" style="margin-bottom: 20px;">
+                        <div class="kpi-card" style="background:var(--background); padding:15px; border-radius:12px; border:1px solid var(--border-color);">
+                            <p style="color:var(--text-muted); font-size:13px; margin:0;">Total Orders</p>
+                            <h3 id="total-orders-kpi" style="margin:5px 0 0 0; font-size:24px;">0</h3>
+                        </div>
+                        <div class="kpi-card" style="background:var(--background); padding:15px; border-radius:12px; border:1px solid var(--border-color);">
+                            <p style="color:var(--text-muted); font-size:13px; margin:0;">Total Gross Sales</p>
+                            <h3 id="total-sales-kpi" style="margin:5px 0 0 0; font-size:24px; color:var(--primary);">₹0</h3>
+                        </div>
+                        <div class="kpi-card" style="background:var(--background); padding:15px; border-radius:12px; border:1px solid var(--border-color);">
+                            <p style="color:var(--text-muted); font-size:13px; margin:0;">Platform Commission</p>
+                            <h3 id="total-commission-kpi" style="margin:5px 0 0 0; font-size:24px; color:var(--success);">₹0</h3>
+                        </div>
+                        <div class="kpi-card" style="background:var(--background); padding:15px; border-radius:12px; border:1px solid var(--border-color);">
+                            <p style="color:var(--text-muted); font-size:13px; margin:0;">Pending Payouts</p>
+                            <h3 id="pending-payouts-kpi" style="margin:5px 0 0 0; font-size:24px; color:var(--warning);">₹0</h3>
+                        </div>
+                    </div>
+
+                    <div class="admin-panel">
+                        <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); margin-bottom: 0;">
+                            <h3 style="margin:0;">Recent Transactions</h3>
+                            <div class="header-search" style="width:250px; background:var(--background); padding: 8px 15px; border-radius: 20px; border: 1px solid var(--border-color); display:flex; align-items:center; gap:8px;">
+                                <i class="fa-solid fa-magnifying-glass" style="color:var(--text-muted);"></i>
+                                <input type="text" id="order-search" placeholder="Search Order ID..." style="border:none; background:transparent; outline:none; color:var(--text-color); width:100%; font-size:14px;">
+                            </div>
+                        </div>
+                        <div class="panel-body" style="padding: 0; overflow-x: auto;">
+                            <table class="admin-table" style="width: 100%; border-collapse: collapse;">
+                                <thead style="background: rgba(0,0,0,0.02);">
+                                    <tr>
+                                        <th style="padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color);">Order ID / Date</th>
+                                        <th style="padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color);">Buyer Details</th>
+                                        <th style="padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color);">Seller Details</th>
+                                        <th style="padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color);">Financials</th>
+                                        <th style="padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color);">Status</th>
+                                        <th style="padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color);">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="all-orders-table-body">
+                                    <tr><td colspan="6" style="text-align:center; padding:30px; color:var(--text-muted);">Loading orders...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Marketing & Promos Tab -->
+                <div id="marketing" class="tab-section" style="display:none;">
+                    <h1 class="page-title">Marketing & Promos</h1>
+                    <div class="admin-panel">
+                        <div class="panel-header">
+                            <h3>Create New Promo Code</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+                                <div class="form-group">
+                                    <label>Promo Code</label>
+                                    <input type="text" class="form-control" placeholder="e.g. DIWALI50" style="text-transform:uppercase;">
+                                </div>
+                                <div class="form-group">
+                                    <label>Discount Amount (₹)</label>
+                                    <input type="number" class="form-control" placeholder="e.g. 50">
+                                </div>
+                                <div class="form-group">
+                                    <label>Valid Until</label>
+                                    <input type="date" class="form-control">
+                                </div>
+                                <div class="form-group" style="display:flex; align-items:flex-end;">
+                                    <button class="btn-primary w-100" onclick="alert('Promo code created successfully!')">Create Promo</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="admin-panel mt-4">
+                        <div class="panel-header">
+                            <h3>Active Promo Codes</h3>
+                        </div>
+                        <div class="panel-body" style="padding:0;">
+                            <table class="admin-table" style="width:100%;">
+                                <thead>
+                                    <tr><th>Code</th><th>Discount</th><th>Expires</th><th>Status</th><th>Action</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>WELCOME100</strong></td>
+                                        <td>₹100</td>
+                                        <td>31 Dec 2026</td>
+                                        <td><span class="status-badge success">Active</span></td>
+                                        <td><button class="btn-danger-small"><i class="fa-solid fa-trash"></i></button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Platform Settings Tab -->
+                <div id="settings" class="tab-section" style="display:none;">
+                    <h1 class="page-title">Platform Settings</h1>
+                    <div class="admin-panel">
+                        <div class="panel-header">
+                            <h3>Global Platform Fees</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label>Base Commission Rate (%)</label>
+                                <input type="number" class="form-control" value="10" max="100">
+                                <p style="font-size:12px; color:var(--text-muted); margin-top:5px;">Standard cut taken from all seller transactions.</p>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label>Standard Delivery Fee (₹)</label>
+                                <input type="number" class="form-control" value="40">
+                            </div>
+                            <button class="btn-primary mt-3" onclick="alert('Settings saved!')">Save Settings</button>
+                        </div>
+                    </div>
+                    <div class="admin-panel mt-4">
+                        <div class="panel-header">
+                            <h3>Danger Zone</h3>
+                        </div>
+                        <div class="panel-body">
+                            <button class="btn-outline w-100" style="color:var(--danger); border-color:var(--danger);" onclick="if(confirm('Clear all local prototype data?')) { localStorage.clear(); window.location.reload(); }">Wipe Local Database Cache</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
+
+    <!-- Seller Details Modal -->
+    <div id="seller-detail-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+        <div style="background:var(--card-bg); border-radius:16px; padding:30px; max-width:480px; width:90%; position:relative; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+            <button onclick="document.getElementById('seller-detail-modal').style.display='none'" style="position:absolute; top:16px; right:16px; background:none; border:none; font-size:20px; cursor:pointer; color:var(--text-muted);"><i class="fa-solid fa-xmark"></i></button>
+            <div style="text-align:center; margin-bottom:20px;">
+                <img id="sdm-avatar" src="" alt="Seller" style="width:80px; height:80px; border-radius:50%; object-fit:cover; margin-bottom:12px;">
+                <h3 id="sdm-name" style="margin:0 0 4px 0;"></h3>
+                <p id="sdm-shop" style="color:var(--text-muted); margin:0; font-size:14px;"></p>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div style="background:var(--background); padding:12px; border-radius:8px;">
+                    <p style="margin:0; font-size:11px; color:var(--text-muted);">Phone</p>
+                    <p id="sdm-phone" style="margin:4px 0 0 0; font-weight:600; font-size:14px;"></p>
+                </div>
+                <div style="background:var(--background); padding:12px; border-radius:8px;">
+                    <p style="margin:0; font-size:11px; color:var(--text-muted);">Role</p>
+                    <p id="sdm-role" style="margin:4px 0 0 0; font-weight:600; font-size:14px;"></p>
+                </div>
+                <div style="background:var(--background); padding:12px; border-radius:8px;">
+                    <p style="margin:0; font-size:11px; color:var(--text-muted);">Status</p>
+                    <p id="sdm-status" style="margin:4px 0 0 0; font-weight:600; font-size:14px;"></p>
+                </div>
+                <div style="background:var(--background); padding:12px; border-radius:8px;">
+                    <p style="margin:0; font-size:11px; color:var(--text-muted);">Joined</p>
+                    <p id="sdm-joined" style="margin:4px 0 0 0; font-weight:600; font-size:14px;"></p>
+                </div>
+            </div>
+            <div style="margin-top:15px;">
+                <p style="margin:0; font-size:11px; color:var(--text-muted);">Address</p>
+                <p id="sdm-address" style="margin:4px 0 0 0; font-size:14px;"></p>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-config.js"></script>
     <script src="js/admin.js"></script>

@@ -37,7 +37,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="delete-btn"><i class="fa-solid fa-trash-can"></i></button>
+                <button class="delete-btn" onclick="removeCartItem(this)"><i class="fa-solid fa-trash-can"></i></button>
             </div>
 
             <!-- Item 2 -->
@@ -55,7 +55,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="delete-btn"><i class="fa-solid fa-trash-can"></i></button>
+                <button class="delete-btn" onclick="removeCartItem(this)"><i class="fa-solid fa-trash-can"></i></button>
             </div>
         </main>
 
@@ -163,5 +163,18 @@
     </div>
 
     <script src="js/cart.js"></script>
+    <script>
+        function removeCartItem(btn) {
+            const item = btn.closest('.cart-item');
+            if (!item) return;
+            item.style.transition = 'opacity 0.3s';
+            item.style.opacity = '0';
+            setTimeout(() => {
+                item.remove();
+                const items = document.querySelectorAll('.cart-item');
+                document.querySelector('.header-top span').innerText = items.length + ' Item' + (items.length !== 1 ? 's' : '');
+            }, 300);
+        }
+    </script>
 </body>
 </html>

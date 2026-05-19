@@ -8,15 +8,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
     <div id="app-container" class="auth-container">
         
-        <!-- Step 1: Initial Login / Phone Entry -->
-        <div class="auth-step active" id="step-phone">
+        <!-- Step 1: Login -->
+        <div class="auth-step active" id="step-login">
             <div class="auth-header">
                 <h2>Welcome to <span class="text-primary">Vyapark</span></h2>
-                <p>Your local marketplace for everything</p>
+                <p>Login to your account</p>
             </div>
             
             <div class="auth-illustration">
@@ -24,27 +26,59 @@
             </div>
 
             <div class="auth-form">
-                <div class="input-group">
-                    <span class="prefix">+91</span>
-                    <input type="tel" id="phone-input" placeholder="Enter mobile number" maxlength="10">
+                <div class="form-group mb-3">
+                    <input type="email" class="form-control" id="login-email" placeholder="Email Address">
                 </div>
-                <button class="btn-primary w-100" onclick="sendOTP()">Continue with Phone</button>
+                <div class="form-group mb-2">
+                    <input type="password" class="form-control" id="login-password" placeholder="Password">
+                </div>
+                <div class="d-flex" style="justify-content: flex-end; margin-bottom: 20px;">
+                    <a href="#" onclick="startOtpFlow('reset')" class="text-primary" style="font-size:14px; font-weight:600; text-decoration:none;">Forgot Password?</a>
+                </div>
+
+                <button class="btn-primary w-100" onclick="doLogin()">Login</button>
                 
                 <div class="divider"><span>OR</span></div>
                 
-                <button class="btn-outline w-100 google-btn" onclick="nextStep('step-role')">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google">
-                    Continue with Google
+                <button class="btn-outline w-100" onclick="startOtpFlow('signup')">
+                    Create New Account
                 </button>
+
+                <!-- Testing Quick Logins -->
+                <div style="background: rgba(99, 102, 241, 0.05); padding: 15px; border-radius: 12px; margin-top: 25px; border: 1px dashed var(--primary);">
+                    <p style="font-size: 12px; color: var(--text-muted); text-align: center; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Developer Quick Login</p>
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 8px;">
+                        <button class="btn-outline-small" onclick="quickLogin('buyer')" style="width:100%; justify-content:center; background:#fff;">👨‍💼 Login as Test Buyer</button>
+                        <button class="btn-outline-small" onclick="quickLogin('seller')" style="width:100%; justify-content:center; background:#fff;">🏪 Login as Test Seller</button>
+                        <button class="btn-outline-small" onclick="quickLogin('admin')" style="width:100%; justify-content:center; background:#fff;">👑 Login as Super Admin</button>
+                    </div>
+                </div>
+
             </div>
         </div>
 
-        <!-- Step 2: OTP Verification -->
+        <!-- Step 2: Email Entry for OTP (Signup / Reset) -->
+        <div class="auth-step" id="step-email-entry">
+            <button class="back-btn" onclick="prevStep('step-login')"><i class="fa-solid fa-arrow-left"></i></button>
+            <div class="auth-header">
+                <h2 id="email-entry-title">Sign Up</h2>
+                <p>Enter your email to receive a verification code</p>
+            </div>
+            
+            <div class="auth-form">
+                <div class="form-group mb-4">
+                    <input type="email" class="form-control" id="otp-email" placeholder="Enter your email address">
+                </div>
+                <button class="btn-primary w-100" onclick="sendEmailOTP()">Send Verification Code</button>
+            </div>
+        </div>
+
+        <!-- Step 3: OTP Verification -->
         <div class="auth-step" id="step-otp">
-            <button class="back-btn" onclick="prevStep('step-phone')"><i class="fa-solid fa-arrow-left"></i></button>
+            <button class="back-btn" onclick="prevStep('step-email-entry')"><i class="fa-solid fa-arrow-left"></i></button>
             <div class="auth-header">
                 <h2>Verify <span class="text-primary">OTP</span></h2>
-                <p>Code sent to <span id="display-phone" class="font-bold">+91 9999999999</span></p>
+                <p>Code sent to <span id="display-email" class="font-bold"></span></p>
             </div>
             
             <div class="otp-inputs">
@@ -52,10 +86,27 @@
                 <input type="text" maxlength="1" class="otp-box">
                 <input type="text" maxlength="1" class="otp-box">
                 <input type="text" maxlength="1" class="otp-box">
+                <input type="text" maxlength="1" class="otp-box">
+                <input type="text" maxlength="1" class="otp-box">
             </div>
             
             <button class="btn-primary w-100 mt-4" onclick="verifyOTP()">Verify & Continue</button>
-            <p class="resend-text">Didn't receive code? <a href="#">Resend (30s)</a></p>
+            <p class="resend-text">Didn't receive code? <a href="#" onclick="sendEmailOTP()">Resend</a></p>
+        </div>
+
+        <!-- Step 4: Create/Reset Password -->
+        <div class="auth-step" id="step-create-password">
+            <div class="auth-header">
+                <h2 id="password-step-title">Create Password</h2>
+                <p>Set a secure password for your account</p>
+            </div>
+            
+            <div class="auth-form">
+                <div class="form-group mb-4">
+                    <input type="password" class="form-control" id="new-password" placeholder="Enter new password (min 6 chars)">
+                </div>
+                <button class="btn-primary w-100" onclick="saveNewPassword()">Save Password</button>
+            </div>
         </div>
 
         <!-- Step 3: Role Selection -->
@@ -125,6 +176,17 @@
             <div class="form-group">
                 <label>Full Address</label>
                 <textarea class="form-control" id="profile-address" placeholder="House No, Street, Landmark" rows="2"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Store / Delivery Location</label>
+                <button type="button" class="btn-outline w-100" id="btn-get-location" onclick="pinLocation()" style="display:flex; justify-content:center; align-items:center; gap:8px;">
+                    <i class="fa-solid fa-location-crosshairs"></i> Pin My Location
+                </button>
+                <div id="map-container" style="width: 100%; height: 150px; border-radius: 8px; margin-top: 10px; display: none; z-index:1;"></div>
+                <input type="hidden" id="loc-lat">
+                <input type="hidden" id="loc-lng">
+                <p id="loc-status" style="font-size:12px; color:var(--text-muted); margin-top:5px; text-align:center;"></p>
             </div>
 
             <button class="btn-primary w-100 mt-4" onclick="finishSetup()">Get Started <i class="fa-solid fa-arrow-right ml-2"></i></button>
